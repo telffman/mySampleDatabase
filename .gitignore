@@ -1,1 +1,7 @@
 secrets.json
+{
+  "host": "mysqlserversampledb.database.windows.net",
+  "database": "your_database_name",
+  "user": "your_username",
+  "password": "your_password"
+}
