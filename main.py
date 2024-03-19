@@ -37,7 +37,7 @@ conn = psycopg2.connect(
 
 cursor = conn.cursor()
 
-insert_query = 'INSERT INTO companies (' + ', '.join(headers) + ') VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+insert_query = 'INSERT INTO companies (Ranking, CompanyName, Industry, Revenue, Revenue_growth, Employees, Headquarters) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
 for row in rows:
     cur.execute(insert_query, row)
