@@ -1,5 +1,5 @@
 import json
-import psycopg2
+import pyodbc
 import requests
 from bs4 import BeautifulSoup
 
@@ -15,6 +15,7 @@ table = heading.find_next("table")
 headers = [header.text.strip() for header in table.find_all('th')]
 
 rows = []
+
 for row in table.find_all('tr')[1:]:  # Exclude header row
     cols = [col.text.strip() for col in row.find_all(['td', 'th'])]
     rows.append(cols)
@@ -26,19 +27,20 @@ database = secrets["database"]
 user = secrets["user"]
 password = secrets["password"]
 
-conn = psycopg2.connect(
-    host=host,
-    database=database,
-    user=user,
-    password=password
+conn = pyodbc.connect (
+    'DRIVER={ODBC Driver 18 for SQL Server};'
+    f'SERVER={secrets["host"]};'
+    f'DATABASE={secrets["database"]};'
+    f'UID={secrets["user"]};'
+    f'PWD={secrets["password"]}'
 )
-
 cursor = conn.cursor()
 
-insert_query = 'INSERT INTO companies (Ranking, CompanyName, Industry, Revenue, Revenue_growth, Employees, Headquarters) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+insert_query = 'INSERT INTO companies (Ranking, CompanyName, Industry, Revenue, RevenueGrowth, Employees, Headquarters) VALUES (?, ?, ?, ?, ?, ?, ?)'
+
 
 for row in rows:
-    cursor.execute(insert_query, row)
+    cursor.execute(insert_query, tuple(row))
 
 # Commit changes
 conn.commit()
