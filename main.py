@@ -1,7 +1,5 @@
 import json
 import psycopg2
-import random
-import base64
 import requests
 from bs4 import BeautifulSoup
 
@@ -23,10 +21,10 @@ for row in table.find_all('tr')[1:]:  # Exclude header row
 
 secrets = json.load(open('secrets.json'))
 
-host = secrets["HOST"]
-database = secrets["DATABASE"]
-user = secrets["USERNAME"]
-password = secrets["PASSWORD"]
+host = secrets["host"]
+database = secrets["database"]
+user = secrets["user"]
+password = secrets["password"]
 
 conn = psycopg2.connect(
     host=host,
@@ -37,16 +35,16 @@ conn = psycopg2.connect(
 
 cursor = conn.cursor()
 
-insert_query = 'INSERT INTO companies (Ranking, CompanyName, Industry, Revenue, Revenue_growth, Employees, Headquarters) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+insert_query = 'INSERT INTO companies (Ranking, CompanyName, Industry, Revenue, Revenue_growth, Employees, Headquarters) VALUES (%s, %s, %s, %s, %s, %s, %s)'
 
 for row in rows:
-    cur.execute(insert_query, row)
+    cursor.execute(insert_query, row)
 
 # Commit changes
 conn.commit()
 
 # Close the connection
-cur.close()
+cursor.close()
 conn.close()
 
 
