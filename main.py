@@ -16,7 +16,7 @@ headers = [header.text.strip() for header in table.find_all('th')]
 
 rows = []
 
-for row in table.find_all('tr')[1:]:  # Exclude header row
+for row in table.find_all('tr')[1:]:  
     cols = [col.text.strip() for col in row.find_all(['td', 'th'])]
     rows.append(cols)
 
@@ -42,10 +42,9 @@ insert_query = 'INSERT INTO companies (Ranking, CompanyName, Industry, Revenue, 
 for row in rows:
     cursor.execute(insert_query, tuple(row))
 
-# Commit changes
+
 conn.commit()
 
-# Close the connection
 cursor.close()
 conn.close()
 
